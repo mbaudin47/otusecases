@@ -1,0 +1,19 @@
+Source : https://think.cs.vt.edu/corgis/csv/billionaires/billionaires.html
+
+Billionaires CSV Library
+
+From the CORGIS Dataset Project
+By Ryan Whitcomb (rwhit94)
+Version 1, created 5-17-16
+Tags: money, rich, wealthy, people, person, billionaire
+Overview
+
+Researchers have compiled a multi-decade database of the super-rich. 
+Building off the Forbes World's Billionaires lists from 1996-2014, 
+scholars at Peterson Institute for International Economics 
+have added a couple dozen more variables about each billionaire - 
+including whether they were self-made or inherited their wealth. 
+(Roughly half of European billionaires and one-third of U.S. billionaires 
+got a significant financial boost from family, the authors estimate.)
+
+http://www.iie.com/publications/interstitial.cfm?ResearchID=2917 
