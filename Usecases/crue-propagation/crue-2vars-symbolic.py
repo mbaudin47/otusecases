@@ -1,26 +1,35 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
-import otguibase
+from openturns.viewer import View
 
-myStudy = otguibase.OTStudy('Study_Crue2Vars')
+# 1. Define the random variables
+myParam = ot.GumbelAB(1013., 558.)
+Q = ot.ParametrizedDistribution(myParam)
+otLOW = ot.TruncatedDistribution.LOWER
+Q = ot.TruncatedDistribution(Q, 0, otLOW)
+Ks = ot.Normal(30.0, 7.5)
+Ks = ot.TruncatedDistribution(Ks, 0, otLOW)
 
-dist_Q = ot.TruncatedDistribution(ot.Gumbel(1./558., 1013.), 0, ot.TruncatedDistribution.LOWER)
-dist_Ks = ot.TruncatedDistribution(ot.Normal(30.0, 7.5), 0, ot.TruncatedDistribution.LOWER)
-
-Q = otguibase.Input('Q', 1000., dist_Q, 'Débit maximal annuel (m3/s)')
-Ks = otguibase.Input('Ks', 30., dist_Ks, 'Strickler (m^(1/3)/s)')
-H = otguibase.Output('H', 'Hauteur d\'eau (m)')
-
-inputs = [Q, Ks]
-outputs = [H]
+# 2. Define the function
 formulas = ['(Q/(Ks*300.*sqrt(0.001)))^(3./5.)']
-myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', inputs, outputs, formulas)
-myStudy.add(myPhysicalModel)
+g = ot.SymbolicFunction(['Q','Ks'],formulas)
 
-## script
-script = myStudy.getPythonScript()
-print(script)
-exec(script)
+# 3. Create the joint distribution
+inputDistribution = ot.ComposedDistribution((Q,Ks))
+inputRandomVector = ot.RandomVector(inputDistribution)
+outputRandomVector = ot.RandomVector(g, inputRandomVector)
+
+# 4. Simple Monte-Carlo sampling
+samplesize=500
+outputSample=outputRandomVector.getSample(samplesize)
+
+# 6. Plot the histogram
+from openturns import VisualTest
+histoGraph = VisualTest.DrawHistogram(outputSample)
+histoGraph.setTitle("Histogramme de la hauteur")
+histoGraph.setXTitle("H (m)")
+histoGraph.setYTitle("Frequence")
+histoGraph.setLegends([""])
+View(histoGraph).show()

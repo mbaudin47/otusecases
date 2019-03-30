@@ -17,8 +17,8 @@ def functionCrue(X) :
     return [S]
 
 # Creation of the problem function
-f = ot.PythonFunction(4, 1, functionCrue) 
-f = ot.MemoizeFunction(f)
+g = ot.PythonFunction(4, 1, functionCrue) 
+g = ot.MemoizeFunction(g)
 
 # 2. Random vector definition
 myParam = ot.GumbelAB(1013., 558.)
@@ -45,7 +45,7 @@ View(Zm.drawPDF()).show()
 #    the output and the event. 
 inputvector = ot.ComposedDistribution([Q, Ks, Zv, Zm])
 inputRV = ot.RandomVector(inputvector)
-S = ot.RandomVector(f, inputRV)
+S = ot.RandomVector(g, inputRV)
 eventF = ot.Event(S, ot.GreaterOrEqual(), 0) 
 
 # 4.bis Draw pairs
@@ -60,7 +60,7 @@ algoProb.run()
 
 # 6. Get the results
 resultAlgo = algoProb.getResult()
-neval = f.getEvaluationCallsNumber()
+neval = g.getEvaluationCallsNumber()
 print("Number of function calls = %d" %(neval))
 pf = resultAlgo.getProbabilityEstimate()
 print("Failure Probability = %e" % (pf))
@@ -72,7 +72,7 @@ print("%.1f %% confidence interval :[%e,%e] " % (level*100,pmin,pmax))
 
 # 7. Plot the histogram
 from openturns import VisualTest
-outComputedPoints = f.getOutputHistory()
+outComputedPoints = g.getOutputHistory()
 histoGraph = VisualTest.DrawHistogram(outComputedPoints,100)
 histoGraph.setTitle("Histogramme de la surverse")
 histoGraph.setXTitle("S (m)")
