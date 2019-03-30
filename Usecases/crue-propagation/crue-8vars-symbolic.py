@@ -1,40 +1,50 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from __future__ import print_function
 import openturns as ot
-import otguibase
+from openturns.viewer import View
 
-myStudy = otguibase.OTStudy('Study_Crue8vars')
+# 2. Create the Input and Output random variables
+myParam = ot.GumbelAB(1013., 558.)
+QGumbel = ot.ParametrizedDistribution(myParam)
+Q = ot.TruncatedDistribution(QGumbel, 0, ot.TruncatedDistribution.LOWER)
+KsNormal = ot.Normal(30.0, 7.5)
+Ks = ot.TruncatedDistribution(KsNormal, 0, ot.TruncatedDistribution.LOWER)
+Zv = ot.Uniform(49.0, 51.0)
+Zm = ot.Uniform(54.0, 56.0)
+#
+Hd = ot.Uniform(7., 9.) # Hd = 3.0;
+Zb = ot.Triangular(55.0, 55.5, 56.0) # Zb = 55.5
+L = ot.Triangular(4990, 5000., 5010.) # L = 5.0e3;
+B = ot.Triangular(295., 300., 305.) # B = 300.0
 
-## Model
-dist_Q = ot.TruncatedDistribution(ot.Gumbel(1./558., 1013.), 0, ot.TruncatedDistribution.LOWER)
-dist_Ks = ot.TruncatedDistribution(ot.Normal(30.0, 7.5), 0, ot.TruncatedDistribution.LOWER)
-dist_Zv = ot.Uniform(49.0, 51.0)
-dist_Zm = ot.Uniform(54.0, 56.0)
-dist_Hd = ot.Uniform(7, 9)
-dist_Zb = ot.Triangular(55, 55.5, 56)
-dist_L = ot.Triangular(4990, 5000, 5010)
-dist_B = ot.Triangular(295, 300, 305)
+Q.setDescription(["Q (m3/s)"])
+Ks.setDescription(["Ks (m^(1/3)/s)"])
+Zv.setDescription(["Zv (m)"])
+Zm.setDescription(["Zm (m)"])
+Hd.setDescription(["Hd (m)"])
+Zb.setDescription(["Zb (m)"])
+L.setDescription(["L (m)"])
+B.setDescription(["B (m)"])
 
-Q = otguibase.Input('Q', 1013., dist_Q, 'Débit maximal annuel (m3/s)')
-Ks = otguibase.Input('Ks', 30., dist_Ks, 'Strickler (m^(1/3)/s)')
-Zv = otguibase.Input('Zv', 50., dist_Zv, 'Côte de la rivière en aval (m)')
-Zm = otguibase.Input('Zm', 55., dist_Zm, 'Côte de la rivière en amont (m)')
-Hd = otguibase.Input('Hd', 8, dist_Hd, 'Hauteur de la digue (m)')
-Zb = otguibase.Input('Zb', 55.5, dist_Zb, 'Hauteur de la berge (m)')
-L = otguibase.Input('L', 5000, dist_L, 'Longueur de la rivière (m)')
-B = otguibase.Input('B', 300, dist_B, 'Largeur de la rivière (m)')
 
-S = otguibase.Output('S','Surverse (m)')
-
-inputs = [Q,Ks,Zv,Zm,Hd,Zb,L,B]
-outputs = [S]
 formulas = ['(Q/(Ks*B*sqrt((Zm-Zv)/L)))^(3.0/5.0)+Zv-Zb-Hd']
-myPhysicalModel = otguibase.SymbolicPhysicalModel('myPhysicalModel', inputs, outputs, formulas)
-myStudy.add(myPhysicalModel)
+g = ot.SymbolicFunction(['Q','Ks','Zv','Zm','Hd','Zb','L','B'],formulas)
 
-## script
-script = myStudy.getPythonScript()
-print(script)
-exec(script)
+# 3. Create the joint distribution
+inputDistribution = ot.ComposedDistribution((Q,Ks,Zv,Zm,Hd,Zb,L,B))
+inputRandomVector = ot.RandomVector(inputDistribution)
+outputRandomVector = ot.RandomVector(g, inputRandomVector)
+
+# 4. Simple Monte-Carlo sampling
+samplesize=500
+outputSample=outputRandomVector.getSample(samplesize)
+
+# 6. Plot the histogram
+from openturns import VisualTest
+histoGraph = VisualTest.DrawHistogram(outputSample[:,0])
+histoGraph.setTitle("Histogramme de la surverse")
+histoGraph.setXTitle("S (m)")
+histoGraph.setYTitle("Frequence")
+histoGraph.setLegends([""])
+View(histoGraph).show()

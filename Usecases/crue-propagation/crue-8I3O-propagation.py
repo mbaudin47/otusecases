@@ -11,16 +11,9 @@ Revue sur l’analyse de sensibilite globale de modeles
 numériques, Bertrand Iooss, 7 Dec 2010
 """
 
-from openturns import (
-    Uniform, PythonFunction, ComposedDistribution, 
-    Normal, TruncatedDistribution, MonteCarlo, 
-    Event, RandomVector, GreaterOrEqual, 
-    NumericalMathFunction, Triangular, Gumbel
-)
+import openturns as ot
 from math import sqrt, expm1
-import time
 from openturns.viewer import View
-from numpy import inf
 
 # 1. Define the G function
 def functionCrue(X) :
@@ -41,24 +34,21 @@ def functionCrue(X) :
     C=CS+CH
     return [H,S,C]
 
-myFunction = PythonFunction(8, 3, functionCrue) 
-
-myFunction.enableHistory()
+myFunction = ot.PythonFunction(8, 3, functionCrue) 
 
 # 2. Create the Input and Output random variables
-
-# 2. Random vector definition
-Q = Gumbel(1./558., 1013.)
-Q = TruncatedDistribution(Q, 0, inf)
-Ks = Normal(30.0, 7.5)
-Ks = TruncatedDistribution(Ks, 0, inf)
-Zv = Uniform(49.0, 51.0)
-Zm = Uniform(54.0, 56.0)
+myParam = ot.GumbelAB(1013., 558.)
+QGumbel = ot.ParametrizedDistribution(myParam)
+Q = ot.TruncatedDistribution(QGumbel, 0, ot.TruncatedDistribution.LOWER)
+KsNormal = ot.Normal(30.0, 7.5)
+Ks = ot.TruncatedDistribution(KsNormal, 0, ot.TruncatedDistribution.LOWER)
+Zv = ot.Uniform(49.0, 51.0)
+Zm = ot.Uniform(54.0, 56.0)
 #
-Hd = Uniform(7., 9.) # Hd = 3.0;
-Zb = Triangular(55.0, 55.5, 56.0) # Zb = 55.5
-L = Triangular(4990, 5000., 5010.) # L = 5.0e3;
-B = Triangular(295., 300., 305.) # B = 300.0
+Hd = ot.Uniform(7., 9.) # Hd = 3.0;
+Zb = ot.Triangular(55.0, 55.5, 56.0) # Zb = 55.5
+L = ot.Triangular(4990, 5000., 5010.) # L = 5.0e3;
+B = ot.Triangular(295., 300., 305.) # B = 300.0
 
 Q.setDescription(["Q (m3/s)"])
 Ks.setDescription(["Ks (m^(1/3)/s)"])
@@ -69,13 +59,13 @@ Zb.setDescription(["Zb (m)"])
 L.setDescription(["L (m)"])
 B.setDescription(["B (m)"])
 
-# Create the joint distribution
-inputDistribution = ComposedDistribution((Q,Ks,Zv,Zm,Hd,Zb,L,B))
-inputRandomVector = RandomVector(inputDistribution)
-outputRandomVector = RandomVector(myFunction, inputRandomVector)
+# 3. Create the joint distribution
+inputDistribution = ot.ComposedDistribution((Q,Ks,Zv,Zm,Hd,Zb,L,B))
+inputRandomVector = ot.RandomVector(inputDistribution)
+outputRandomVector = ot.RandomVector(myFunction, inputRandomVector)
 
-# 5. Simple Monte-Carlo sampling
-samplesize=100
+# 4. Simple Monte-Carlo sampling
+samplesize=500
 outputSample=outputRandomVector.getSample(samplesize)
 
 # 6. Plot the histogram
@@ -83,6 +73,13 @@ from openturns import VisualTest
 histoGraph = VisualTest.DrawHistogram(outputSample[:,0])
 histoGraph.setTitle("Histogramme de la hauteur")
 histoGraph.setXTitle("H (m)")
+histoGraph.setYTitle("Frequence")
+histoGraph.setLegends([""])
+View(histoGraph).show()
+
+histoGraph = VisualTest.DrawHistogram(outputSample[:,1])
+histoGraph.setTitle("Histogramme de la surverse")
+histoGraph.setXTitle("S (m)")
 histoGraph.setYTitle("Frequence")
 histoGraph.setLegends([""])
 View(histoGraph).show()
