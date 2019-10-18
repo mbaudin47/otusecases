@@ -19,7 +19,7 @@ Requirements
 The dependencies are: 
 
 - Python >= 2.7 or >= 3.3
-- `OpenTURNS <http://www.openturns.org>`_ >= 1.12
+- `OpenTURNS <http://www.openturns.org>`_ >= 1.13
 - `Jupyter Notebook <https://jupyter.org>`_
 
 

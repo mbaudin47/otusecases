@@ -1,5 +1,4 @@
 from openturns.viewer import View
-from numpy import inf
 import openturns as ot
 from math import sqrt
 
@@ -14,7 +13,7 @@ def functionCrue(X) :
 
 # Creation of the problem function
 f = ot.PythonFunction(4, 1, functionCrue) 
-f.enableHistory()
+f = ot.MemoizeFunction(f)
 
 # 2. Random vector definition
 Q = ot.Gumbel(1./558., 1013.)
@@ -25,7 +24,7 @@ Q = ot.Gumbel()
 Q.setParameter(ot.GumbelAB()([1013., 558.]))
 print(Q)
 '''
-Q = ot.TruncatedDistribution(Q, 0, inf)
+Q = ot.TruncatedDistribution(Q, 0, ot.TruncatedDistribution.LOWER)
 unknownKs = 30.0
 unknownZv = 50.0
 unknownZm = 55.0
@@ -50,12 +49,10 @@ outputH = f(inputSample)
 #print(outputH)
 
 # 7. Plot the histogram
-from openturns import VisualTest
-histoGraph = VisualTest.DrawHistogram(outputH,20)
+histoGraph = ot.HistogramFactory().build(outputH).drawPDF()
 histoGraph.setTitle("Histogramme de la surverse")
 histoGraph.setXTitle("S (m)")
 histoGraph.setYTitle("Frequence")
-histoGraph.setBoundingBox([-1,7,0,0.60])
 histoGraph.setLegends([""])
 View(histoGraph).show()
 

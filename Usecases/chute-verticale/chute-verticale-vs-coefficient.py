@@ -40,4 +40,4 @@ else:
     pl.ylabel("Altitude (m)")
     pl.title("Chute dans un fluide visqueux")
 pl.legend()
-pl.show()
+
