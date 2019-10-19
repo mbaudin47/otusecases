@@ -19,17 +19,16 @@ g = ot.SymbolicFunction(['Q','Ks'],formulas)
 # 3. Create the joint distribution
 inputDistribution = ot.ComposedDistribution((Q,Ks))
 inputRandomVector = ot.RandomVector(inputDistribution)
-outputRandomVector = ot.RandomVector(g, inputRandomVector)
+outputRandomVector = ot.CompositeRandomVector(g, inputRandomVector)
 
 # 4. Simple Monte-Carlo sampling
 samplesize=500
 outputSample=outputRandomVector.getSample(samplesize)
 
 # 6. Plot the histogram
-from openturns import VisualTest
-histoGraph = VisualTest.DrawHistogram(outputSample)
+histoGraph = ot.HistogramFactory().build(outputSample).drawPDF()
 histoGraph.setTitle("Histogramme de la hauteur")
 histoGraph.setXTitle("H (m)")
 histoGraph.setYTitle("Frequence")
 histoGraph.setLegends([""])
-View(histoGraph).show()
+View(histoGraph)

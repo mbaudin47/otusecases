@@ -27,7 +27,7 @@ def functionCrue4VarsStochastic(X):
     B = ot.Uniform(50.,500.)
     inputvector = ot.ComposedDistribution([Hd, Zb, L, B])
     inputRV = ot.RandomVector(inputvector)
-    S = ot.RandomVector(g, inputRV)
+    S = ot.CompositeRandomVector(g, inputRV)
     # 3. Sample output
     sampleSize = 10
     outputSample = S.getSample(sampleSize)
@@ -63,17 +63,17 @@ Zm = ot.Uniform(54.0, 56.0)
 # 3. Create the joint distribution
 inputDistribution = ot.ComposedDistribution((Q,Ks,Zv,Zm))
 inputRandomVector = ot.RandomVector(inputDistribution)
-outputRandomVector = ot.RandomVector(g, inputRandomVector)
+outputRandomVector = ot.CompositeRandomVector(g, inputRandomVector)
 
 # 4. Simple Monte-Carlo sampling
 samplesize=500
 outputSample=outputRandomVector.getSample(samplesize)
 
 # 6. Plot the histogram
-from openturns import VisualTest
-histoGraph = VisualTest.DrawHistogram(outputSample)
+histoGraph = ot.HistogramFactory().build(outputSample).drawPDF()
 histoGraph.setTitle("Histogramme de la surverse")
 histoGraph.setXTitle("S (m)")
 histoGraph.setYTitle("Frequence")
 histoGraph.setLegends([""])
-View(histoGraph).show()
+View(histoGraph)
+

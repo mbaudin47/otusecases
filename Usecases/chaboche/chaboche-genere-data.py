@@ -37,14 +37,13 @@ outputSigma = f(inputSample)
 #print(outputSigma)
 
 # 7. Plot the histogram
-from openturns import VisualTest
-histoGraph = VisualTest.DrawHistogram(outputSigma/1.e6,20)
+histoGraph = ot.HistogramFactory().build(outputSigma/1.e6).drawPDF()
 histoGraph.setTitle("Histogramme de la contrainte")
 histoGraph.setXTitle("Stress (MPa)")
 histoGraph.setYTitle("Frequence")
 #histoGraph.setBoundingBox([-1,7,0,0.60])
 histoGraph.setLegends([""])
-View(histoGraph).show()
+View(histoGraph)
 
 # Generate observation noise
 sigmaObservationNoiseSigma = 40.e6 # (Pa)
@@ -58,4 +57,5 @@ observedSample.setDescription(["Strain","Stress"])
 observedSample[:,0] = inputSample[:,0]
 observedSample[:,1] = observedSigma[:]
 
-observedSample.exportToCSVFile("chaboche-observations-v1.csv")
+observedSample.exportToCSVFile("chaboche-observations.csv")
+

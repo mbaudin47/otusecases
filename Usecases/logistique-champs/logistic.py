@@ -72,7 +72,7 @@ graph.setXTitle(parameterIndexName)
 graph.setYTitle(fieldName)
 myTrajectories =  [ot.Drawable.ConvertFromHSV(i * (360.0/size), 1.0, 1.0) for i in range(len(graph.getDrawables()))]
 graph.setColors(myTrajectories)
-ot.Show(graph)
+View(graph)
 
 # Dessine la trajectoire moyenne
 size = 100
@@ -115,7 +115,7 @@ graph.setYTitle(fieldName)
 modesStr = ["Mode "+str(i) for i in range(nbModes)]
 graph.setLegends(modesStr)
 graph.setLegendPosition("topleft")
-ot.Show(graph)
+View(graph)
 
 # Valeurs propres selectionnees
 eigenValues = KLResult.getEigenValues()
@@ -183,7 +183,7 @@ xi_marges = [ot.KernelSmoothing(ot.Normal(), False, 0, False).build(sampleKsi.ge
 
 # graphes des pdf marginales
 for i in range(len(xi_marges)):
-    monHisto = ot.VisualTest_DrawHistogram(sampleKsi.getMarginal(i))
+    monHisto = ot.HistogramFactory().build(sampleKsi.getMarginal(i)).drawPDF()
     monHisto.setColors(["blue"])
     graph.add(monHisto)
     graph = xi_marges[i].drawPDF()
@@ -198,3 +198,4 @@ for i in range(len(xi_marges)):
 pairs = ot.Pairs(sampleKsi.rank())
 pairs.setPointStyle("bullet")
 View(pairs)
+

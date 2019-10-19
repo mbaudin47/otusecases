@@ -45,13 +45,13 @@ View(Zm.drawPDF()).show()
 #    the output and the event. 
 inputvector = ot.ComposedDistribution([Q, Ks, Zv, Zm])
 inputRV = ot.RandomVector(inputvector)
-S = ot.RandomVector(g, inputRV)
+S = ot.CompositeRandomVector(g, inputRV)
 eventF = ot.Event(S, ot.GreaterOrEqual(), 0) 
 
 # 4.bis Draw pairs
 sample = inputvector.getSample(500)
 myPairs = ot.Pairs(sample, "N=500", sample.getDescription(), "red", "bullet")
-View(myPairs).show()
+View(myPairs)
 
 # 5. Create the Monte-Carlo algorithm
 algoProb = ot.ProbabilitySimulationAlgorithm(eventF)
@@ -71,9 +71,8 @@ pmax=pf+0.5*c95
 print("%.1f %% confidence interval :[%e,%e] " % (level*100,pmin,pmax))
 
 # 7. Plot the histogram
-from openturns import VisualTest
 outComputedPoints = g.getOutputHistory()
-histoGraph = VisualTest.DrawHistogram(outComputedPoints,100)
+histoGraph = ot.HistogramFactory().build(outComputedPoints).drawPDF()
 histoGraph.setTitle("Histogramme de la surverse")
 histoGraph.setXTitle("S (m)")
 histoGraph.setYTitle("Frequence")
@@ -89,5 +88,5 @@ bb_upper[0] = 5
 bb.setUpperBound(bb_upper)
 histoGraph.setBoundingBox(bb)
 histoGraph.setLegends([""])
-View(histoGraph).show()
+View(histoGraph)
 

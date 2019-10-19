@@ -52,8 +52,8 @@ test_python_script chute-verticale-vs-coefficient.py
 cd ..
 # crue-calage
 cd crue-calage
-test_ipython_notebook Calage-crue-OT.ipynb
-test_ipython_notebook Calage-crue-OT-lineaire.ipynb
+test_ipython_notebook Calage-crue.ipynb
+test_ipython_notebook Calage-crue-lineaire.ipynb
 test_python_script crue-4vars-genere-data.py
 cd ..
 # crue-propagation
@@ -86,12 +86,12 @@ test_ipython_notebook La_fonction_Ishigami.ipynb
 cd ..
 # logistique-calage
 cd logistique-calage
-test_python_script logistique-calage-generate-data.py
+test_python_script logistic-calage-genere-data.py
 test_ipython_notebook Logistique-calage.ipynb
 cd ..
 # logistique-champs
 cd logistique-champs
-test_python_script logistic-OT.py
+test_python_script logistic.py
 test_ipython_notebook logistic-example.ipynb
 cd ..
 # morris

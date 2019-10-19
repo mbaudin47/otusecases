@@ -33,14 +33,15 @@ inputDistribution = ot.ComposedDistribution([XF,XL,Xa,XD,Xd,XE])
 # Create the input random vector
 inputRandomVector = ot.RandomVector(inputDistribution)
 
-outputRV = ot.RandomVector(g, inputRandomVector)
+outputRV = ot.CompositeRandomVector(g, inputRandomVector)
 
 # 7. Plot the histogram
 outputSample = outputRV.getSample(500)
-histoGraph = ot.VisualTest.DrawHistogram(outputSample)
+histoGraph = ot.HistogramFactory().build(outputSample).drawPDF()
 samplesize=outputSample.getSize()
 histoGraph.setTitle("Histogramme de la flèche - N=%d" % (samplesize))
 histoGraph.setXTitle("Flèche")
 histoGraph.setYTitle("Fréquence")
 histoGraph.setLegends([""])
-View(histoGraph).show()
+View(histoGraph)
+

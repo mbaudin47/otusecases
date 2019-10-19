@@ -68,4 +68,5 @@ observedSample.setDescription(["Q (m3/s)","H (m)"])
 observedSample[:,0] = inputSample[:,0]
 observedSample[:,1] = observedH[:]
 
-observedSample.exportToCSVFile("calage-KS-observations-v2.csv")
+observedSample.exportToCSVFile("hauteurs-observations.csv")
+

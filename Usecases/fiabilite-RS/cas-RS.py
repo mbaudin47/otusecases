@@ -13,7 +13,7 @@ g = ot.SymbolicFunction(["R","S"],["R-S"])
 
 inputvector = ot.ComposedDistribution([R,S])
 inputRV = ot.RandomVector(inputvector)
-outputRV = ot.RandomVector(g, inputRV)
+outputRV = ot.CompositeRandomVector(g, inputRV)
 eventF = ot.Event(outputRV, ot.GreaterOrEqual(), 0) 
 
 # Create the Monte-Carlo algorithm
