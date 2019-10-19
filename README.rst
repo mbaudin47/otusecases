@@ -1,3 +1,6 @@
+.. image:: https://circleci.com/gh/mbaudin47/otusecases/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/mbaudin47/otusecases/tree/master
+
 otusecases
 ==========
 
@@ -20,9 +23,11 @@ Requirements
 
 The dependencies are: 
 
-- Python >= 2.7 or >= 3.3
+- Python >= 3.3
 - `OpenTURNS <http://www.openturns.org>`_ >= 1.13
 - `Jupyter Notebook <https://jupyter.org>`_
+- `otmorris <https://anaconda.org/conda-forge/otmorris>`_
+
 
 Installation
 ~~~~~~~~~~~~
