@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun 01 11:48:42 2017
-
-@author: c61372
-
 Analyse la convergence des estimateurs des indices de sensibilité 
 pour la fonction G-Sobol.
 """
@@ -46,7 +42,6 @@ def plotAbsoluteError(algorithmName,sampleSize,absErrorFirst,absErrorTotal):
     xscale("log")
     yscale("log")
     legend()
-    show()
     return None
 
 a = array([0,9,99])
@@ -68,11 +63,11 @@ for i in range(nloops):
 absErrorFirst = zeros((nloops,1))
 absErrorTotal = zeros((nloops,1))
 for i in range(nloops):
-    inputDesign = ot.SaltelliSensitivityAlgorithm.Generate(
-        distribution, int(sampleSize[i]))
+    size = int(sampleSize[i])
+    inputDesign = ot.SobolIndicesExperiment(distribution, size).generate()
     outputDesign = gsobol(inputDesign,a)
     sensitivity_algorithm = ot.SaltelliSensitivityAlgorithm(
-        inputDesign, outputDesign, int(sampleSize[i]))
+        inputDesign, outputDesign, size)
     # Compute accuracy
     absErrFirst_i,absErrTotal_i = computeAbsoluteError(sensitivity_algorithm,a)
     absErrorFirst[i] = absErrFirst_i
@@ -87,11 +82,11 @@ absErrorFirst = zeros((nloops,1))
 absErrorTotal = zeros((nloops,1))
 for i in range(nloops):
     computeSecondOrder = False
-    inputDesign = ot.MartinezSensitivityAlgorithm.Generate(
-        distribution, int(sampleSize[i]),computeSecondOrder)
+    size = int(sampleSize[i])
+    inputDesign = ot.SobolIndicesExperiment(distribution, size).generate()
     outputDesign = gsobol(inputDesign,a)
     sensitivity_algorithm = ot.MartinezSensitivityAlgorithm(
-        inputDesign, outputDesign, int(sampleSize[i]))
+        inputDesign, outputDesign, size)
     # Compute accuracy
     absErrFirst_i,absErrTotal_i = computeAbsoluteError(sensitivity_algorithm,a)
     absErrorFirst[i] = absErrFirst_i
@@ -106,11 +101,11 @@ absErrorFirst = zeros((nloops,1))
 absErrorTotal = zeros((nloops,1))
 for i in range(nloops):
     computeSecondOrder = False
-    inputDesign = ot.JansenSensitivityAlgorithm.Generate(
-        distribution, int(sampleSize[i]),computeSecondOrder)
+    size = int(sampleSize[i])
+    inputDesign = ot.SobolIndicesExperiment(distribution, size).generate()
     outputDesign = gsobol(inputDesign,a)
     sensitivity_algorithm = ot.JansenSensitivityAlgorithm(
-        inputDesign, outputDesign, int(sampleSize[i]))
+        inputDesign, outputDesign, size)
     # Compute accuracy
     absErrFirst_i,absErrTotal_i = computeAbsoluteError(sensitivity_algorithm,a)
     absErrorFirst[i] = absErrFirst_i
@@ -125,14 +120,15 @@ absErrorFirst = zeros((nloops,1))
 absErrorTotal = zeros((nloops,1))
 for i in range(nloops):
     computeSecondOrder = False
-    inputDesign = ot.MauntzKucherenkoSensitivityAlgorithm.Generate(
-        distribution, int(sampleSize[i]),computeSecondOrder)
+    size = int(sampleSize[i])
+    inputDesign = ot.SobolIndicesExperiment(distribution, size).generate()
     outputDesign = gsobol(inputDesign,a)
     sensitivity_algorithm = ot.MauntzKucherenkoSensitivityAlgorithm(
-        inputDesign, outputDesign, int(sampleSize[i]))
+        inputDesign, outputDesign, size)
     # Compute accuracy
     absErrFirst_i,absErrTotal_i = computeAbsoluteError(sensitivity_algorithm,a)
     absErrorFirst[i] = absErrFirst_i
     absErrorTotal[i] = absErrTotal_i
 
 plotAbsoluteError("Gsobol-MauntzKucherenko",sampleSize,absErrorFirst,absErrorTotal)
+

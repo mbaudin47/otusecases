@@ -46,7 +46,7 @@ graph.setTitle('chute visqueuse')
 graph.setXTitle(r'$t$')
 graph.setYTitle(r'$z$')
 graph.setColors([ot.Drawable.ConvertFromHSV(i * (360.0/size), 1.0, 1.0) for i in range(len(graph.getDrawables()))])
-ot.Show(graph)
+otv.View(graph)
 
 # Compute the KL decomposition of the output
 size = 500
@@ -60,7 +60,7 @@ graph = scaledModes.drawMarginal(0)
 graph.setTitle('Modes de KL, chute visqueuse')
 graph.setXTitle(r'$t$')
 graph.setYTitle(r'$z$')
-ot.Show(graph)
+otv.View(graph)
 
 # Here we have to suppress the Dirac component
 distX = distX.getMarginal(range(4))

@@ -62,24 +62,24 @@ B.setDescription(["B (m)"])
 # 3. Create the joint distribution
 inputDistribution = ot.ComposedDistribution((Q,Ks,Zv,Zm,Hd,Zb,L,B))
 inputRandomVector = ot.RandomVector(inputDistribution)
-outputRandomVector = ot.RandomVector(myFunction, inputRandomVector)
+outputRandomVector = ot.CompositeRandomVector(myFunction, inputRandomVector)
 
 # 4. Simple Monte-Carlo sampling
 samplesize=500
 outputSample=outputRandomVector.getSample(samplesize)
 
 # 6. Plot the histogram
-from openturns import VisualTest
-histoGraph = VisualTest.DrawHistogram(outputSample[:,0])
+histoGraph = ot.HistogramFactory().build(outputSample[:,0]).drawPDF()
 histoGraph.setTitle("Histogramme de la hauteur")
 histoGraph.setXTitle("H (m)")
 histoGraph.setYTitle("Frequence")
 histoGraph.setLegends([""])
-View(histoGraph).show()
+View(histoGraph)
 
-histoGraph = VisualTest.DrawHistogram(outputSample[:,1])
+histoGraph = ot.HistogramFactory().build(outputSample[:,1]).drawPDF()
 histoGraph.setTitle("Histogramme de la surverse")
 histoGraph.setXTitle("S (m)")
 histoGraph.setYTitle("Frequence")
 histoGraph.setLegends([""])
-View(histoGraph).show()
+View(histoGraph)
+
