@@ -40,9 +40,8 @@ test_ipython_notebook Sensibilite-Exemple-Perrin.ipynb
 cd ..
 # chaboche
 cd chaboche
-test_ipython_notebook Calibration-Chaboche.ipynb
+test_ipython_notebook calibration_chaboche.ipynb
 test_python_script chaboche-genere-data.py
-test_python_script chaboche-NLLS.py
 cd ..
 # chute-verticale
 cd chute-verticale
