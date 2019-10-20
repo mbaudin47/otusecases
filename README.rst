@@ -13,8 +13,7 @@ This project contains OpenTURNS use cases and datasets.
 
 - The datasets can be used to perform data analysis with OpenTURNS. The goal is to have a set of .csv files which can be easily imported with OpenTURNS for example to fit a marginal distribution, to fit a copula or to create a datamodel. 
 
-- Each use-case is made of a function and the distribution of its inputs. Each use-case has a specific methodological goal: 
-central dispersion, reliability, sensitivity analysis or calibration. In general, each use-case is presented in a Notebook: the equations of the function, the references (if any), the simplest possible study which shows how to use the test-case. The use-cases can be used to benchmark a method, but the Notebook only shows the simplest (e.g. the Monte-Carlo method): the goal of each example is *not* to actuall show the benchmark results. Generally, each use case has a specific goal (e.g. central dispersion), but some use cases can be derived to achieve different methodological goals. 
+- Each use-case is made of a function and the distribution of its inputs. Each use-case has a specific methodological goal: central dispersion, reliability, sensitivity analysis or calibration. In general, each use-case is presented in a Notebook: the equations of the function, the references (if any), the simplest possible study which shows how to use the test-case. The use-cases can be used to benchmark a method, but the Notebook only shows the simplest (e.g. the Monte-Carlo method): the goal of each example is *not* to actuall show the benchmark results. Generally, each use case has a specific goal (e.g. central dispersion), but some use cases can be derived to achieve different methodological goals. 
 
 It is based on `OpenTURNS <http://www.openturns.org>`_.
 
