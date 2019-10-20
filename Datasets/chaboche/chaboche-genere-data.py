@@ -58,4 +58,4 @@ observedSample.setDescription(["Strain","Stress"])
 observedSample[:,0] = inputSample[:,0]
 observedSample[:,1] = observedSigma[:]
 
-observedSample.exportToCSVFile("chaboche-observations-v1.csv")
+observedSample.exportToCSVFile("chaboche-observations.csv")
